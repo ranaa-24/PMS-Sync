@@ -1,7 +1,13 @@
+import { useAuthContext } from "@/providers/auth.context"
+import { Button } from "@/components/ui/button";
 
 function Dashboard() {
+  const {user, logout} = useAuthContext();
+
   return (
-    <div>Dashboard</div>
+    <div>
+      <Button onClick={logout}>Logout</Button>
+    </div>
   )
 }
 
