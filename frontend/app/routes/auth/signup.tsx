@@ -64,8 +64,8 @@ function SignUp() {
   return (
     <div className="w-full mx-auto h-screen flex justify-center items-center ">
       <Card className="mx-auto w-[360px] md:w-sm lg:w-[420px] bg-surface text-main-font border-2 border-main-border animate-fade animate-once animate-duration-[500ms]">
-        <CardHeader className="text-center mb-4">
-          <CardTitle className="text-2xl md:text-3xl font-bold">Create an account</CardTitle>
+        <CardHeader className="text-center mb-3">
+          <CardTitle className="text-2xl md:text-3xl font-bold">Create an Account</CardTitle>
           <CardDescription className=" text-xs md:text-sm text-secondary-font">Create your account in seconds and get started with a smarter, smoother workflow.</CardDescription>
         </CardHeader>
 

@@ -288,16 +288,28 @@ export const resetPasswordRequest = async (req, res) => {
             expiresAt: new Date(Date.now() + 30 * 60 * 1000)
         });
 
-        const varificationLink = `${process.env.FRONTEND_URL}/verify-mail?token=${resetToken}`;
+        const varificationLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
         const emailContent = `
-            <div style="background-color: #ffffff; color: #000000; font-family: Arial, sans-serif; padding: 20px; border: 1px solid #000000; border-radius: 5px;">
-            <h1 style="text-align: center;">Welcome to Sync, ${user.name}!</h1>
-            <p style="font-size: 16px; text-align: center">Thank you for registering. Please verify your email address by clicking the link below:</p>
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="${varificationLink}" style="display: inline-block; padding: 10px 20px; background-color: #000000; color: #ffffff; text-decoration: none; border-radius: 5px;">Verify Email</a>
-            </div>
-            </div>
+        <div style="background-color: #ffffff; color: #000000; font-family: Arial, sans-serif; padding: 24px; border: 1px solid #000000; border-radius: 8px; max-width: 500px; margin: auto;">
+        <h2 style="text-align: center; font-size: 22px; margin-bottom: 16px;">Reset Your Password</h2>
+        <p style="font-size: 16px; text-align: center; margin-bottom: 24px;">
+        We received a request to reset the password for your <strong>Sync</strong> account.
+        Click the button below to choose a new password.
+        </p>
+        <div style="text-align: center; margin-bottom: 32px;">
+        <a href="${varificationLink}" style="display: inline-block; padding: 12px 24px; background-color: #000000; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px;">
+        Reset Password
+        </a>
+        </div>
+        <p style="font-size: 14px; color: #555555; text-align: center;">
+        If you didn't request this, you can safely ignore this email.
+        </p>
+        <p style="font-size: 12px; color: #888888; text-align: center; margin-top: 16px;">
+        This link will expire in 30 min for your security.
+        </p>
+        </div>
         `;
+        
         const emailSubject = "Reset your password";
 
         const isEmailSent = await sendMail(email, emailSubject, emailContent);
@@ -309,6 +321,9 @@ export const resetPasswordRequest = async (req, res) => {
         }
 
 
+        return res.status(200).json({
+            message: "Email sent successfully"
+        });
 
     } catch (error) {
         console.log("Error in resetPasswordRequest : ", error);
@@ -320,46 +335,53 @@ export const resetPasswordRequest = async (req, res) => {
 // to reset the user password 
 export const verifyAndResetPassword = async (req, res) => {
     try {
-        const {token, newPassword, confirmPassword} = req.body;
-        const playload = jwt.verify(token, process.env.JWT_SECRET);
+        const { token, newPassword, confirmPassword } = req.body;
 
-        if(!playload) return res.status(401).json({message : "Unauthorized"});
+        let playload;
 
-        const {userId, purpose} = playload;
+        try {
+            playload = jwt.verify(token, process.env.JWT_SECRET);
+        } catch (error) {
+            return res.status(401).json({message: "Invalid Token or expired!"});
+        }
 
-        if(purpose !== "reset-password") return res.status(401).json({message : "Unauthorized"});
+        if (!playload) return res.status(401).json({ message: "Unauthorized" });
+
+        const { userId, purpose } = playload;
+
+        if (purpose !== "reset-password") return res.status(401).json({ message: "Unauthorized" });
 
         const verificationRecord = await Varification.findOne({
             userId: userId, token: token
         });
 
-        if(!verificationRecord) return res.status(401).json({message : "Unauthorized"});
-        
+        if (!verificationRecord) return res.status(401).json({ message: "Unauthorized" });
+
         const isTokenExpired = verificationRecord.expiresAt < new Date();
-        
-        if(isTokenExpired) return res.status(401).json({message : "Token expired"});
+
+        if (isTokenExpired) return res.status(401).json({ message: "Token expired" });
 
         // get the user and set new password 
-        
-        const user = await User.findById(userId);   
-        if(!user) return res.status(401).json({message : "Unauthorized"});
-        if(newPassword !== confirmPassword) {
+
+        const user = await User.findById(userId);
+        if (!user) return res.status(401).json({ message: "Unauthorized" });
+        if (newPassword !== confirmPassword) {
             return res.status(400).json({
-                message : "Passwords do not match"
+                message: "Passwords do not match"
             })
         }
 
         const hashedPass = await bcrypt.hash(newPassword, 10);
         user.password = hashedPass;
-        
+
         await user.save();
 
         await Varification.findByIdAndDelete(verificationRecord._id);
 
-        return res.status(200).json({message : "Password reset successfully"});
+        return res.status(200).json({ message: "Password reset successfully" });
 
     } catch (error) {
         console.log("Error in verifyAndResetPassword: ", error);
-        return res.send(500).json({message : "Internal server error"});
+        return res.status(500).json({ message: "Internal server error" });
     }
 }

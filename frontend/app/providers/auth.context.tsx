@@ -31,7 +31,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const navigate = useNavigate();
     const currentPath = useLocation().pathname;
-    console.log(currentPath);
     
     const isPublicRoute = publicRoutes.includes(currentPath);
 
