@@ -17,6 +17,8 @@
   --color-secondary-font: oklch(0.556 0 0);
 
   --color-surface: rgba(255, 255, 255, 0.05);
+  --color-deep-surface: oklch(0.180 0 0);
+
   --color-main-border: rgba(255, 255, 255, 0.1);
   --color-glass-shadow: rgba(255, 255, 255, 0.05);
   --color-hover-shadow: rgba(0, 217, 255, 0.6);
@@ -144,6 +146,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
 
 @layer base {
   * {
