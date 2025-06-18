@@ -7,6 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { User2 } from "lucide-react";
 import { Link } from "react-router";
 import WorkSpaceAvatar from "../common/workSpaceAvatar";
+import { Ellipsis } from "lucide-react";
+
 
 interface HeaderPropsType {
     onWorkSpaceSelected: (workSpace: WorkSpaceType) => void;
@@ -24,12 +26,14 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
                 <div>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant={"outline"} className="bg-theme-tertiary text-main-bg border-glass-shadow border hover:bg-theme-tertiary/90 font-bold px-2 md:px-4 max-w-30 md:max-w-50">
+                            <Button className="bg-surface text-main-font border-glass-shadow border-2 hover:bg-theme-tertiary hover:text-main-bg font-bold px-2 md:px-4 w-36 md:w-44 overflow-hidden">
+                                <div className="h-2 w-2 rounded-full transition-all duration-300 group-hover:scale-[100.8]" style={{ backgroundColor: selectedWorkSpace?.workSpaceColor || "#e5e7eb" }}></div>
+
                                 {selectedWorkSpace ? (<>
                                     {
                                         selectedWorkSpace?.workSpaceColor && <WorkSpaceAvatar color={selectedWorkSpace?.workSpaceColor} name={selectedWorkSpace?.name} />
                                     }
-                                    <span className="font-bold">{selectedWorkSpace?.name.length > 15 ? selectedWorkSpace?.name.slice(0, 15) + "..." : selectedWorkSpace?.name}</span>
+                                    <span className="font-bold text-xs md:text-sm">{selectedWorkSpace?.name.length > 15 ? selectedWorkSpace?.name.slice(0, 15) + "..." : selectedWorkSpace?.name}</span>
                                 </>) : (<>
                                     <span className="font-bold text-xs md:text-sm" >Select Workspace</span>
                                 </>)}
@@ -55,7 +59,7 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
                                     )
                                 }
                             </DropdownMenuGroup>
-                            
+
                             <DropdownMenuGroup>
                                 {/* For creating workspaces */}
                             </DropdownMenuGroup>
@@ -76,9 +80,13 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
                                         <AvatarImage src={user?.profilePicture} />
                                         <AvatarFallback className="bg-surface border border-glass-shadow font-bold">{user?.name.charAt(0).toUpperCase() || <User2 />}</AvatarFallback>
                                     </Avatar>
-                                    <div className="hidden sm:block">
-                                        <h1 className="font-bold text-main-font">{user?.name.split(" ")[0]}</h1>
-                                        <p className="text-[10px] -mt-1 text-secondary-font">Admin Panel</p>
+                                    <div className="sm:flex justify-between w-32 items-center hidden">
+                                        <div >
+                                            <h1 className="font-bold text-main-font">{((user?.name?.split(" ")[0] ?? "").length < 12) ? user?.name?.split(" ")[0] ?? "" : (user?.name?.split(" ")[0] ?? "") + ".."}</h1>
+                                            
+                                            <p className="text-[10px] -mt-1 text-secondary-font">Admin Panel</p>
+                                        </div>
+                                        <p><Ellipsis/></p>
                                     </div>
                                 </div>
                             </DropdownMenuTrigger>
