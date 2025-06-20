@@ -3,13 +3,15 @@ import { useAuthContext } from "@/providers/auth.context"
 import Loader from "@/components/common/Loader";
 import Header from "@/components/layouts/header";
 import { useState } from "react";
-import {type WorkSpaceType } from "@/types";
-
+import { type WorkSpaceType } from "@/types";
+import SidebarComponent from "@/components/layouts/sidebar";
+import { SidebarContextProvider } from "@/providers/sidebar-context";
 
 function DashboardLayout() {
   const { isAuthenticated, isLoading } = useAuthContext();
   const [isCreatingWorkSpace, setIsCreatingWorkSpace] = useState(false);
   const [currentWorkSpace, setCurrentWorkSpace] = useState<WorkSpaceType | null>(null);
+
 
   const handleWorkSpaceSelected = (workSpace: WorkSpaceType) => {
     setCurrentWorkSpace(workSpace);
@@ -23,19 +25,19 @@ function DashboardLayout() {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to={'/login'} replace/>
+    return <Navigate to={'/login'} replace />
   }
 
 
   return (
     <div className="flex h-screen w-full">
-      {/* Sidebar */}
+      <SidebarComponent currentWorkSpace={currentWorkSpace} />
 
       <div className="flex flex-1 flex-col">
-        <Header 
-        onWorkSpaceSelected = {handleWorkSpaceSelected}
-        selectedWorkSpace = {null}
-        onCreatedWorkSpace = {() => setIsCreatingWorkSpace(true)}
+        <Header
+          onWorkSpaceSelected={handleWorkSpaceSelected}
+          selectedWorkSpace={null}
+          onCreatedWorkSpace={() => setIsCreatingWorkSpace(true)}
         />
 
         <main className="flex-1 overflow-y-auto p-0 h-full w-full">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSidebarContext } from '@/providers/sidebar-context';
 
 interface LogoProps {
   className?: string;
@@ -6,8 +7,9 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ className = '', static: isStatic = false }) => {
+  const { isPannelClosed } = useSidebarContext();
   return (
-    <div className={`inline-flex items-center gap-2 ${className}`}>
+    <div className={`inline-flex items-center gap-0 md:gap-2 ${className}`}>
       <div className={`relative ${isStatic ? '' : 'logo-container'}`}>
         <svg
           width="40"
@@ -22,51 +24,51 @@ const Logo: React.FC<LogoProps> = ({ className = '', static: isStatic = false })
               <stop offset="0%" stopColor="#1a1f36" />
               <stop offset="100%" stopColor="#00d4ff" />
             </linearGradient>
-            
+
             <linearGradient id="secondary-gradient" x1="100%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="#00d4ff" />
               <stop offset="50%" stopColor="#0099cc" />
               <stop offset="100%" stopColor="#1a1f36" />
             </linearGradient>
-            
+
             <linearGradient id="accent-gradient" x1="50%" y1="0%" x2="50%" y2="100%">
               <stop offset="0%" stopColor="#ff6b35" />
               <stop offset="100%" stopColor="#e55a2b" />
             </linearGradient>
-            
+
             <linearGradient id="primary-hover" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#2a2f46" />
               <stop offset="100%" stopColor="#33e4ff" />
             </linearGradient>
-            
+
             <linearGradient id="secondary-hover" x1="100%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="#33e4ff" />
               <stop offset="50%" stopColor="#00b3dc" />
               <stop offset="100%" stopColor="#2a2f46" />
             </linearGradient>
-            
+
             <linearGradient id="accent-hover" x1="50%" y1="0%" x2="50%" y2="100%">
               <stop offset="0%" stopColor="#ff7b45" />
               <stop offset="100%" stopColor="#f56a3b" />
             </linearGradient>
-            
+
             <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-              <feMerge> 
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
+              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
           </defs>
-          
-          <circle 
-            cx="32" 
-            cy="32" 
-            r="28" 
-            fill="transparent" 
+
+          <circle
+            cx="32"
+            cy="32"
+            r="28"
+            fill="transparent"
             className="glow-circle"
           />
-          
+
           <g className="layer-1" transform-origin="32 32">
             <path
               d="M32 4 L50 28 L32 20 L14 28 Z"
@@ -89,7 +91,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', static: isStatic = false })
               opacity="0.9"
             />
           </g>
-          
+
           <g className="layer-2" transform-origin="32 32">
             <path
               d="M32 12 L44 32 L32 26 L20 32 Z"
@@ -112,7 +114,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', static: isStatic = false })
               opacity="0.85"
             />
           </g>
-          
+
           <g className="layer-3" transform-origin="32 32">
             <path
               d="M32 18 L40 32 L32 46 L24 32 Z"
@@ -120,7 +122,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', static: isStatic = false })
               opacity="0.95"
             />
           </g>
-          
+
           <g className="layer-4" transform-origin="32 32">
             <circle
               cx="32"
@@ -131,7 +133,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', static: isStatic = false })
             />
           </g>
         </svg>
-        
+
         <style>{`
           .logo-container {
             cursor: pointer;
@@ -178,15 +180,18 @@ const Logo: React.FC<LogoProps> = ({ className = '', static: isStatic = false })
             transform: scale(1.2);
             opacity: 1;
           }
-        `}</style>
+          `}</style>
       </div>
-      
-      <div className="logo-text">
-        <h1 className={`text-2xl md:text-3xl hidden smaller:inline-block font-bold text-white tracking-wider ${isStatic ? '' : 'hover-text'} `}>
-          Sync
-        </h1>
-        
-        <style>{`
+
+      {
+        !isPannelClosed && <div className="logo-text animate-fade-right">
+          <h1 className={`text-2xl hidden md:inline-block font-bold text-white tracking-wider ${isStatic ? '' : 'hover-text'} `}>
+            Sync
+          </h1>
+        </div>
+      }
+
+      <style>{`
           .logo-text {
             font-family: 'Poppins', 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
             user-select: none;
@@ -205,7 +210,6 @@ const Logo: React.FC<LogoProps> = ({ className = '', static: isStatic = false })
             
           }
         `}</style>
-      </div>
     </div>
   );
 };

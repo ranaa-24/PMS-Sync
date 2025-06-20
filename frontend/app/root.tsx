@@ -12,6 +12,7 @@ import "./app.css";
 import ReactQueryProvider from "./providers/react-query-provider";
 import { Toaster } from 'sonner'
 import { AuthContextProvider } from "./providers/auth.context";
+import { SidebarContextProvider } from "./providers/sidebar-context";
 
 
 export const links: Route.LinksFunction = () => [
@@ -48,12 +49,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
 
   return <ReactQueryProvider>
-
-    <AuthContextProvider>
-      <Outlet />
-      <Toaster position="top-center" richColors />
-    </AuthContextProvider>
-    
+    <SidebarContextProvider>
+      <AuthContextProvider>
+        <Outlet />
+        <Toaster position="top-center" richColors />
+      </AuthContextProvider>
+    </SidebarContextProvider>
   </ReactQueryProvider>
 }
 

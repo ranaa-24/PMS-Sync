@@ -7,7 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { User2 } from "lucide-react";
 import { Link } from "react-router";
 import WorkSpaceAvatar from "../common/workSpaceAvatar";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, PlusSquareIcon, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { useSidebarContext } from "@/providers/sidebar-context";
 
 
 interface HeaderPropsType {
@@ -19,15 +20,23 @@ interface HeaderPropsType {
 function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: HeaderPropsType) {
     const { user, logout } = useAuthContext();
     const workspaces: WorkSpaceType[] = [];
+    const {isPannelClosed, setIsPannelClosed} = useSidebarContext();
 
     return (
-        <div className="sticky top-0 z-50 border-b-2 border-main-border">
-            <div className="flex h-14 items-center justify-between px-4 md:px-6 lg:px-8 py-4">
-                <div>
+        <div className="sticky top-0 z-50 px-4 md:px-6 lg:px-8 ">
+            <div className="flex h-14 items-center justify-between  border-b-2 border-main-border">
+
+                <div className="flex items-center gap-4">
+                    <div className="hidden md:block">
+                        <Button onClick={() => setIsPannelClosed(pre => !pre)} variant={"ghost"} size={"icon"} className="bg-surface hover border-glass-shadow border hover:bg-theme-tertiary transition-all duration-300">
+                            {isPannelClosed ? <PanelLeftOpen size={10}/> : <PanelLeftClose size={10} />}
+                        </Button>
+                    </div>
+                    <div className="h-6 w-[1px] bg-main-border hidden md:block"></div>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button className="bg-surface text-main-font border-glass-shadow border-2 hover:bg-theme-tertiary hover:text-main-bg font-bold px-2 md:px-4 w-36 md:w-44 overflow-hidden">
-                                <div className="h-2 w-2 rounded-full transition-all duration-300 group-hover:scale-[100.8]" style={{ backgroundColor: selectedWorkSpace?.workSpaceColor || "#e5e7eb" }}></div>
+                                <div className="h-2 w-2 rounded-full transition-all duration-300 group-hover:scale-[100.8]" style={{ backgroundColor: selectedWorkSpace?.workSpaceColor || "#9ca3af" }}></div>
 
                                 {selectedWorkSpace ? (<>
                                     {
@@ -59,9 +68,11 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
                                     )
                                 }
                             </DropdownMenuGroup>
-
+                            <DropdownMenuSeparator className="bg-glass-shadow" />
                             <DropdownMenuGroup>
-                                {/* For creating workspaces */}
+                                <DropdownMenuItem onClick={onCreatedWorkSpace} className="font-medium cursor-pointer focus:bg-theme-primary focus:text-main-font ">
+                                    <PlusSquareIcon className="text-main-font font-bold" /> Create Workspace
+                                </DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -83,10 +94,10 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
                                     <div className="sm:flex justify-between w-32 items-center hidden">
                                         <div >
                                             <h1 className="font-bold text-main-font">{((user?.name?.split(" ")[0] ?? "").length < 12) ? user?.name?.split(" ")[0] ?? "" : (user?.name?.split(" ")[0] ?? "") + ".."}</h1>
-                                            
+
                                             <p className="text-[10px] -mt-1 text-secondary-font">Admin Panel</p>
                                         </div>
-                                        <p><Ellipsis/></p>
+                                        <p><Ellipsis /></p>
                                     </div>
                                 </div>
                             </DropdownMenuTrigger>
