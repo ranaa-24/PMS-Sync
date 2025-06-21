@@ -46,7 +46,7 @@ function SideNav({ items, className, currentWorkSpace, ...prop }: PropsType) {  
                         }
                     }
 
-                    return <Button title={item.title} key={item.href} variant={isActive ? "outline" : "ghost"} size={isPannelClosed ? "icon" : "default"} className={cn(isPannelClosed ? "justify-center" : "justify-center md:justify-start", isActive && "bg-theme-primary text-main-font font-medium", "w-full")} onClick={handleClick}>
+                    return <Button title={item.title} key={item.href} variant={isActive ? "outline" : "ghost"} size={isPannelClosed ? "icon" : "default"} className={cn(isPannelClosed ? "justify-center" : "justify-center md:justify-start", isActive && "bg-theme-primary/20 border-theme-primary/80 text-main-font font-medium", "w-full", "hover:bg-theme-primary/10 hover:text-main-font", !isActive && "text-secondary-font")} onClick={handleClick}>
                         <Icon className="size-5" />
                         {isPannelClosed ? <span className="sr-only hidden md:block">{item.title}</span> : <span className="hidden md:block">{item.title}</span>}
                     </Button>

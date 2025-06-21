@@ -5,7 +5,7 @@ import Header from "@/components/layouts/header";
 import { useState } from "react";
 import { type WorkSpaceType } from "@/types";
 import SidebarComponent from "@/components/layouts/sidebar";
-import { SidebarContextProvider } from "@/providers/sidebar-context";
+import CreateWorkspace from "@/components/layouts/workspaces/ceateWorkspace";
 
 function DashboardLayout() {
   const { isAuthenticated, isLoading } = useAuthContext();
@@ -46,6 +46,11 @@ function DashboardLayout() {
           </div>
         </main>
       </div>
+
+      <CreateWorkspace
+        isCreatingWorkSpace={isCreatingWorkSpace}
+        setIsCreatingWorkSpace={setIsCreatingWorkSpace}
+      />
 
     </div>
   )

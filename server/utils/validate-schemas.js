@@ -25,3 +25,8 @@ export const verifyRequestEmailAndRestPasswordSchema = z.object({
     confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters long' }),
 });
 
+export const workspaceSchema = z.object({
+    name: z.string().min(1, "Name Required"), 
+    description: z.string().max(250, "Maximum 250 characters long").optional(), 
+    color: z.string().min(1, "Color required"),
+})

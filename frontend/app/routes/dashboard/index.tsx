@@ -6,7 +6,7 @@ function Dashboard() {
 
   return (
     <div>
-        <Button onClick={logout}>Logout</Button>
+        Dashboard
     </div>
   )
 }

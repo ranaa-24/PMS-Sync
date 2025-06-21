@@ -7,8 +7,7 @@ import Logo from "../ui/logo";
 import { useSidebarContext } from "@/providers/sidebar-context";
 import { ScrollArea } from "../ui/scroll-area";
 import SideNav, { type NavItemType } from "../ui/sideNavBarItems";
-import { Button } from "../ui/button";
-import { LogOut } from "lucide-react";
+
 
 
 function SidebarComponent({ currentWorkSpace }: { currentWorkSpace: WorkSpaceType | null }) {
@@ -67,12 +66,6 @@ function SidebarComponent({ currentWorkSpace }: { currentWorkSpace: WorkSpaceTyp
                 />
             </ScrollArea>
 
-            <div>
-                <Button variant={"ghost"} onClick={logout}>
-                    <LogOut />
-                    <span className="hidden md:block">Logout</span>
-                </Button>
-            </div>
         </div>
     )
 }
