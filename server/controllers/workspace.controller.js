@@ -27,4 +27,20 @@ const createWorkspceController = async (req, res) => {
     }
 }
 
-export {createWorkspceController}
+
+const getWorkspaces = async (req, res) => {
+    try {
+        const workspaces = await WorkspaceModel.find({
+            "members.user" : req.user._id           // req.user is the current login user, 
+        }).sort({createdAt: -1});
+
+        return res.status(200).json(workspaces)
+        
+    } catch (error) {
+        console.log("Error in getWorkspace", error);
+        return res.status(500).json({message : "Internal Server error."})
+    }
+}
+
+
+export {createWorkspceController, getWorkspaces}

@@ -6,6 +6,22 @@ import { useState } from "react";
 import { type WorkSpaceType } from "@/types";
 import SidebarComponent from "@/components/layouts/sidebar";
 import CreateWorkspace from "@/components/layouts/workspaces/ceateWorkspace";
+import { getData } from "@/lib/api-request-utils";
+
+
+
+//clientLoader in react router, why fetching the content after initial rennder, it will fetch the data before component loads
+export const clientLoader = async () => {
+  try {
+    //Returns a single promise, Resolves when all promises resolve, The result is an array of values
+    const [workspaces] = await Promise.all([getData('/workspaces')]);
+
+    return {workspaces};    // this will availabe in useLoaderData() of this component/route or any subroute
+
+  } catch (error) {
+    console.log("Error in dashboard layout..", error);
+  }
+}
 
 function DashboardLayout() {
   const { isAuthenticated, isLoading } = useAuthContext();
@@ -36,7 +52,7 @@ function DashboardLayout() {
       <div className="flex flex-1 flex-col">
         <Header
           onWorkSpaceSelected={handleWorkSpaceSelected}
-          selectedWorkSpace={null}
+          selectedWorkSpace={currentWorkSpace}
           onCreatedWorkSpace={() => setIsCreatingWorkSpace(true)}
         />
 
@@ -47,6 +63,7 @@ function DashboardLayout() {
         </main>
       </div>
 
+      {/* Invisible modal */}
       <CreateWorkspace
         isCreatingWorkSpace={isCreatingWorkSpace}
         setIsCreatingWorkSpace={setIsCreatingWorkSpace}

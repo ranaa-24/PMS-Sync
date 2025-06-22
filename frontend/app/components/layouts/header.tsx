@@ -5,10 +5,11 @@ import { Button } from "../ui/button";
 import { Bell } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { User2 } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import WorkSpaceAvatar from "../common/workSpaceAvatar";
 import { Ellipsis, PlusSquareIcon, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useSidebarContext } from "@/providers/sidebar-context";
+import { useEffect, useRef } from "react";
 
 
 interface HeaderPropsType {
@@ -17,10 +18,38 @@ interface HeaderPropsType {
     onCreatedWorkSpace: () => void;
 }
 
+
+interface LoaderDataType {
+    workspaces: WorkSpaceType[],
+}
+
 function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: HeaderPropsType) {
     const { user, logout } = useAuthContext();
-    const workspaces: WorkSpaceType[] = [];
-    const {isPannelClosed, setIsPannelClosed} = useSidebarContext();
+    const { isPannelClosed, setIsPannelClosed } = useSidebarContext();
+    const panelToggle = useRef<HTMLButtonElement>(null);
+    // by deafult useloaderdata returns unknown {.. : ..}
+    const { workspaces } = useLoaderData() as LoaderDataType;
+    console.log(workspaces[0]);
+
+    // alt+m to minimize
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if(e.altKey && e.key.toLowerCase() === 'm'){
+                panelToggle.current?.click();
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () =>  window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
+    function capitalizeFirstLetter(str: string) {
+        if (str.length === 0) {
+            return str; 
+        }
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 
     return (
         <div className="sticky top-0 z-50 px-4 md:px-6 lg:px-8 ">
@@ -28,21 +57,19 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
 
                 <div className="flex items-center gap-4">
                     <div className="hidden md:block">
-                        <Button onClick={() => setIsPannelClosed(pre => !pre)} variant={"ghost"} size={"icon"} className="bg-surface hover border-glass-shadow border hover:bg-theme-tertiary transition-all duration-300">
-                            {isPannelClosed ? <PanelLeftOpen size={10}/> : <PanelLeftClose size={10} />}
+                        <Button title="Alt+m" ref={panelToggle} onClick={() => setIsPannelClosed(pre => !pre)} variant={"ghost"} size={"icon"} className="bg-surface hover border-glass-shadow border hover:bg-theme-tertiary transition-all duration-300">
+                            {isPannelClosed ? <PanelLeftOpen size={10} /> : <PanelLeftClose size={10} />}
                         </Button>
                     </div>
                     <div className="h-6 w-[1px] bg-main-border hidden md:block"></div>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button className="bg-surface text-main-font border-glass-shadow border-2 hover:bg-theme-tertiary hover:text-main-bg font-bold px-2 md:px-4 w-36 md:w-44 overflow-hidden">
-                                <div className="h-2 w-2 rounded-full transition-all duration-300 group-hover:scale-[100.8]" style={{ backgroundColor: selectedWorkSpace?.workSpaceColor || "#9ca3af" }}></div>
+                            <Button className="justify-start bg-surface text-main-font border-glass-shadow border-2 hover:bg-theme-tertiary hover:text-main-bg font-bold px-2 md:px-4 w-36 md:w-44 overflow-hidden">
+
+                                <div className="h-2 w-2 rounded-full transition-all duration-300 group-hover:scale-[100.8] animate-pulse" style={{ backgroundColor: selectedWorkSpace?.color || "#9ca3af" }}></div>
 
                                 {selectedWorkSpace ? (<>
-                                    {
-                                        selectedWorkSpace?.workSpaceColor && <WorkSpaceAvatar color={selectedWorkSpace?.workSpaceColor} name={selectedWorkSpace?.name} />
-                                    }
-                                    <span className="font-bold text-xs md:text-sm">{selectedWorkSpace?.name.length > 15 ? selectedWorkSpace?.name.slice(0, 15) + "..." : selectedWorkSpace?.name}</span>
+                                    <span className="font-bold text-xs md:text-sm">{selectedWorkSpace?.name.length > 12 ? capitalizeFirstLetter(selectedWorkSpace?.name.slice(0, 12)) + "..." : capitalizeFirstLetter(selectedWorkSpace?.name)}</span>
                                 </>) : (<>
                                     <span className="font-bold text-xs md:text-sm" >Select Workspace</span>
                                 </>)}
@@ -59,9 +86,9 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
                                             Looks empty here...
                                         </DropdownMenuItem>
                                     ) : (
-                                        workspaces.map((workspace) => (
+                                        workspaces.map((workspace: WorkSpaceType) => (
                                             <DropdownMenuItem key={workspace._id} className="font-medium cursor-pointer" onClick={() => onWorkSpaceSelected(workspace)}>
-                                                {workspace.workSpaceColor && <WorkSpaceAvatar color={workspace.workSpaceColor} name={workspace.name} />}
+                                                {workspace.color && <WorkSpaceAvatar color={workspace.color} name={workspace.name} />}
                                                 <span className="ml-2">{workspace.name}</span>
                                             </DropdownMenuItem>
                                         ))

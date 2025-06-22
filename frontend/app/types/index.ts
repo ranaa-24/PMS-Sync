@@ -19,7 +19,7 @@ export interface WorkSpaceType {
   name: string;
   description?: string;
   owner: User | string;
-  workSpaceColor: string;
+  color: string;
   members: WorkSpaceMemberType[];
   createdAt: Date;
   updatedAt: Date;
