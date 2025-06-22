@@ -14,9 +14,9 @@ import { useNavigate } from "react-router";
 
 
 const themeColors = [
+    "#2ECC71", // Emerald Green
     "#4A90E2", // Soft Blue
     "#FF6B6B", // Warm Coral
-    "#2ECC71", // Emerald Green
     "#9B59B6", // Royal Purple
     "#F1C40F", // Amber Yellow
     "#7F8C8D", // Slate Gray

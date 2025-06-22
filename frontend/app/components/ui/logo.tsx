@@ -9,7 +9,7 @@ interface LogoProps {
 const Logo: React.FC<LogoProps> = ({ className = '', static: isStatic = false }) => {
   const { isPannelClosed } = useSidebarContext();
   return (
-    <div className={`inline-flex items-center gap-0 md:gap-2 ${className}`}>
+    <div className={`inline-flex items-center gap-0 lg:gap-2 ${className}`}>
       <div className={`relative ${isStatic ? '' : 'logo-container'}`}>
         <svg
           width="40"
@@ -185,7 +185,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', static: isStatic = false })
 
       {
         !isPannelClosed && <div className="logo-text animate-fade-right">
-          <h1 className={`text-2xl hidden md:inline-block font-bold text-white tracking-wider ${isStatic ? '' : 'hover-text'} `}>
+          <h1 className={`text-2xl hidden lg:inline-block font-bold text-white tracking-wider ${isStatic ? '' : 'hover-text'} `}>
             Sync
           </h1>
         </div>

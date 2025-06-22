@@ -21,7 +21,7 @@ export function meta({ }: Route.MetaArgs) {
   ];
 }
 
-//innfering a type from schema defination
+//innfering a type from schem a defination
 export type LoginFormType = z.infer<typeof LoginSchema>
 
 function login() {

@@ -27,7 +27,7 @@ function SideNav({ items, className, currentWorkSpace, ...prop }: PropsType) {  
 
 
     return (
-        <nav className={cn("flex flex-col gap-y-3", isPannelClosed && "items-center", "items-center md:items-start w-full", className)} {...prop}>
+        <nav className={cn("flex flex-col gap-y-3", isPannelClosed && "items-center", "items-center lg:items-start w-full", className)} {...prop}>
             {
                 items.map((item) => {
                     const Icon = item.icon;
@@ -46,9 +46,9 @@ function SideNav({ items, className, currentWorkSpace, ...prop }: PropsType) {  
                         }
                     }
 
-                    return <Button title={item.title} key={item.href} variant={isActive ? "outline" : "ghost"} size={isPannelClosed ? "icon" : "default"} className={cn(isPannelClosed ? "justify-center" : "justify-center md:justify-start", isActive && "bg-theme-primary/20 border-theme-primary/80 text-main-font font-medium", "w-full", "hover:bg-theme-primary/10 hover:text-main-font", !isActive && "text-secondary-font")} onClick={handleClick}>
+                    return <Button title={item.title} key={item.href} variant={isActive ? "outline" : "ghost"} size={isPannelClosed ? "icon" : "default"} className={cn(isPannelClosed ? "justify-center" : "justify-center lg:justify-start", isActive && "bg-theme-primary/20 border-theme-primary/80 text-main-font font-medium", "w-full", "hover:bg-theme-primary/10 hover:text-main-font", !isActive && "text-secondary-font")} onClick={handleClick}>
                         <Icon className="size-5" />
-                        {isPannelClosed ? <span className="sr-only hidden md:block">{item.title}</span> : <span className="hidden md:block">{item.title}</span>}
+                        {isPannelClosed ? <span className="sr-only hidden lg:block">{item.title}</span> : <span className="hidden lg:block">{item.title}</span>}
                     </Button>
                 })
             }

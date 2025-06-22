@@ -16,7 +16,7 @@ const WorkspaceSchema = new Schema({
     color: {
         type: String,
         required: true,
-        default: "#4A90E2"
+        default: "#2ECC71"
     },
 
     owner: {

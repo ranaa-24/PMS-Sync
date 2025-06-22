@@ -31,5 +31,5 @@ export const forgotPasswordSchema = z.object({
 export const workspaceSchema = z.object({
     name: z.string().min(2, "Name must be atleast 3 characters long"), 
     color: z.string(), 
-    description: z.string().max(250, "Too Long. Maximum 250 charcaters.").optional(),
+    description: z.string().max(45, "Too Long. Maximum 45 charcaters.").optional(),
 })

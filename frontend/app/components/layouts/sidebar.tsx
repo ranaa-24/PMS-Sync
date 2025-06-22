@@ -48,9 +48,9 @@ function SidebarComponent({ currentWorkSpace }: { currentWorkSpace: WorkSpaceTyp
     ]
 
     return (
-        <div className={cn("px-2 md:px-4 bg-surface flex flex-col border-r border-main-border transition-all duration-300", isPannelClosed ? "w-16 md:w-[80px]" : "w-16 md:w-[200px] lg:md:w-[240px]")}>
+        <div className={cn("px-2 lg:px-4 bg-surface flex flex-col border-r border-main-border transition-all duration-300", isPannelClosed ? "w-16 md:w-[80px]" : "w-16  lg:md:w-[240px]")}>
 
-                <div className={cn("flex items-center",isPannelClosed ? "justify-center" : "justify-center md:justify-start" ,"h-14 border-b-2 border-main-border")}>
+                <div className={cn("flex items-center",isPannelClosed ? "justify-center" : "justify-center lg:justify-start" ,"h-14 border-b-2 border-main-border")}>
                     <Link to={'/dashboard'} >
                         <div className="flex items-center justify-center w-full ">
                             <Logo />
