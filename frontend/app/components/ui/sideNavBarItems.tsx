@@ -33,12 +33,12 @@ function SideNav({ items, className, currentWorkSpace, ...prop }: PropsType) {  
                     const Icon = item.icon;
                     const isActive = location.pathname === item.href;
 
-                    //if we user clicks on wokspaces section then no isses just move to that page, what if user clicks on other section like, 'members', then we need to  navigate to the members route with the workspace id, so only seleted workspaces memebrs are visoble
+                    //if user clicks on wokspaces section then no isses just move to that page, what if user clicks on other section like, 'members', then we need to  navigate to the members route with the workspace id, so only seleted workspaces memebrs are visoble
                     // Note this is a single handler attached to every sections/nav items
                     const handleClick: any = () => {
                         // clicked on workspace
-                        if (item.href === 'workspaces') {
-                            navigate("/joo");
+                        if (item.href === '/workspaces') {
+                            navigate("/workspaces");
                         } else if (currentWorkSpace && currentWorkSpace._id) { // user clicked on other items
                             navigate(`${item.href}/?workspaceId=${currentWorkSpace._id}`)
                         } else {  // if there is no workspaces seleted, navogate and show some selet workspace page 

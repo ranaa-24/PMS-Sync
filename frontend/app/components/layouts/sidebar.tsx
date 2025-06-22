@@ -11,7 +11,6 @@ import SideNav, { type NavItemType } from "../ui/sideNavBarItems";
 
 
 function SidebarComponent({ currentWorkSpace }: { currentWorkSpace: WorkSpaceType | null }) {
-    const { user, logout } = useAuthContext();
     const { isPannelClosed } = useSidebarContext();
 
     const sidebarItems = [

@@ -29,7 +29,6 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
     const panelToggle = useRef<HTMLButtonElement>(null);
     // by deafult useloaderdata returns unknown {.. : ..}
     const { workspaces } = useLoaderData() as LoaderDataType;
-    console.log(workspaces[0]);
 
     // alt+m to minimize
     useEffect(() => {
