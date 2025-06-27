@@ -35,7 +35,7 @@ const WorkspaceSchema = new Schema({
         joinedAt: {type: Date, default: Date.now}, 
     }], 
     
-    projects: [{type: Types.ObjectId, ref: "projects"}],    /// array of project reference, not array of obbjects,, like subject: [string] - arr of strings
+    projects: [{type: Types.ObjectId, ref: "project"}],    /// array of project reference, not array of obbjects,, like subject: [string] - arr of strings
 
 }, {timestamps: true});
 

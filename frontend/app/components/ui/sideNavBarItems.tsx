@@ -31,7 +31,7 @@ function SideNav({ items, className, currentWorkSpace, ...prop }: PropsType) {  
             {
                 items.map((item) => {
                     const Icon = item.icon;
-                    const isActive = location.pathname === item.href;
+                    const isActive = location.pathname.startsWith(item.href);
 
                     //if user clicks on wokspaces section then no isses just move to that page, what if user clicks on other section like, 'members', then we need to  navigate to the members route with the workspace id, so only seleted workspaces memebrs are visoble
                     // Note this is a single handler attached to every sections/nav items

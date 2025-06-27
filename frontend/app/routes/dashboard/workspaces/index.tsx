@@ -44,7 +44,7 @@ function Workspaces() {
             </div>
 
 
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 py-4">
+            <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3 py-4">
                 {
                     workspaces.map((ws) => (
                         <WorkspaceCard key={ws._id} workspace={ws} />
@@ -99,10 +99,10 @@ const WorkspaceCard = ({ workspace }: { workspace: WorkSpaceType }) => {
                     <CardDescription className="mt-2 overflow-hidden h-10 wrap-break-word">{workspace.description || "Doesn't have a description yet."}</CardDescription>
                 </CardHeader>
 
-                <CardContent>
-                    <div className="mt-2 flex items-center justify-between">
+                <CardContent >
+                    <div className="sm:mt-1 flex items-center justify-between">
                         <span
-                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold"
+                            className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 rounded-full text-xs font-semibold"
                             style={{
                                 backgroundColor: `${workspace.color}22`,
                                 color: workspace.color,

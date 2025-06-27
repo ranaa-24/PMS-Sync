@@ -55,12 +55,12 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
             <div className="flex h-14 items-center justify-between  border-b-2 border-main-border">
 
                 <div className="flex items-center gap-4">
-                    <div className="hidden md:block">
+                    <div className="hidden lg:block">
                         <Button title="Alt+m" ref={panelToggle} onClick={() => setIsPannelClosed(pre => !pre)} variant={"ghost"} size={"icon"} className="bg-surface hover border-glass-shadow border hover:bg-theme-tertiary transition-all duration-300">
                             {isPannelClosed ? <PanelLeftOpen size={10} /> : <PanelLeftClose size={10} />}
                         </Button>
                     </div>
-                    <div className="h-6 w-[1px] bg-main-border hidden md:block"></div>
+                    <div className="h-6 w-[1px] bg-main-border hidden lg:block"></div>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button className="justify-start bg-surface text-main-font border-glass-shadow border-2 hover:bg-theme-tertiary hover:text-main-bg font-bold px-2 md:px-4 w-36 md:w-44 overflow-hidden">

@@ -8,10 +8,20 @@ export const useCreateWorkspace = () => {
     })
 }
 
+
+// fetches all the wp where the user is member, res: {workspaces}
 export const useFetchWorkspacesQuery = () => {
     return useQuery({
         queryKey:["workspaces"], 
         queryFn: async () => getData("/workspaces"),
-
     })
 }
+
+// get all the projects of the current workspace res: {workspace, projects}
+export const useFetchWorkspaceQuery = (workspaceId: string) => {
+    return useQuery({
+        queryKey: ["workspace", workspaceId],
+        queryFn: async () => getData(`/workspaces/${workspaceId}/projects`),
+    })
+}
+

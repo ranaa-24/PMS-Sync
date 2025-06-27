@@ -5,6 +5,9 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import router from "./routes/index.js";
 
+
+
+
 dotenv.config();
 const app = express();
 const corsOptions = {
@@ -47,6 +50,8 @@ app.use((err, req, res, next) => {
     console.error("Error caught:", err.message);
     res.status(500).send("Internal Server Error");
 });
+
+
 
 
 const PORT = process.env.PORT || 3000;

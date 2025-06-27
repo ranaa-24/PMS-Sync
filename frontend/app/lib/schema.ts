@@ -1,3 +1,4 @@
+import { ProjectStatus } from '@/types';
 import { z } from 'zod';
 
 export const LoginSchema = z.object({
@@ -33,3 +34,28 @@ export const workspaceSchema = z.object({
     color: z.string(), 
     description: z.string().max(45, "Too Long. Maximum 45 charcaters.").optional(),
 })
+
+export const ProjectSchma = z.object({
+    title: z.string().min(2, "Title must be atleast 2 characters long"),
+    description: z.string().max(120, "Too Long. Maximum 120 charcaters.").optional(),
+    status: z.nativeEnum(ProjectStatus),
+    startDate: z.string().min(1, "Start date is required"),
+    dueDate: z.string().min(1, "Due date is required"),
+    // array of objects with user and role
+    members: z.array(
+        z.object({
+            user: z.string(),       // will only contain user id
+            role: z.enum(["admin", "member", "owner", "viewer"]),
+        })
+    ).optional(),
+    tags: z.string().optional(),
+}).refine(
+    (data) => {
+        // Compare as ISO date strings
+        return new Date(data.dueDate) >= new Date(data.startDate);
+    },
+    {
+        message: "Due date must be the same day or after the start date",
+        path: ["dueDate"],
+    }
+)

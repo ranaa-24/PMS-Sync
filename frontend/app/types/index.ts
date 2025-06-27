@@ -1,3 +1,5 @@
+import { sub } from "date-fns";
+
 export interface User {
   _id: string;
   email: string;
@@ -8,7 +10,8 @@ export interface User {
   profilePicture?: string;
 }
 
-interface WorkSpaceMemberType {
+export interface WorkSpaceMemberType {
+  _id: string;
   user: User;
   role: "admin" | "member" | "owner" | "viewer";
   joinedAt: Date;
@@ -18,9 +21,87 @@ export interface WorkSpaceType {
   _id: string;
   name: string;
   description?: string;
-  owner: User | string;
+  owner: User | string; // User object or user ID
   color: string;
   members: WorkSpaceMemberType[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export enum ProjectStatus {
+  PLANNING = "Planning",
+  IN_PROGRESS = "In Progress",
+  COMPLETED = "Completed",
+  ON_HOLD = "On Hold",
+  CANCELLED = "Cancelled",
+}
+
+export enum TaskStatus {
+  TODO = "To Do",
+  IN_PROGRESS = "In Progress",
+  REVIEW = "Review",
+  DONE = "Done",
+}
+
+export enum TaskPriority {
+  LOW = "Low",
+  MEDIUM = "Medium",
+  HIGH = "High",
+}
+
+export interface subtaskType {
+  _id: string;
+  title: string;
+  completed: boolean;
+  createdAt: Date;
+}
+
+export interface AttachmentType {
+  _id: string;
+  fileName: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize?: number;
+  uploadedBy: User | string;
+  uploadedAt: Date;
+}
+
+export interface TaskType {
+  _id: string;
+  title: string;
+  description?: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  dueDate?: Date;
+  assignees?: User[] | string[];
+  createdAt: Date;
+  updatedAt: Date;
+  project: ProjectType;
+  tags?: string[];
+  isarchived?: boolean;
+  createdBy: User | string;
+  subTasks?: subtaskType[];
+  watchers?: User[] | string[];
+  attachments?: AttachmentType[];
+}
+
+export interface ProjectMemberType{
+    user: User | string;
+    role: "manager" | "contributor" | "viewer";
+}
+
+export interface ProjectType {
+  _id: string;
+  title: string;
+  description?: string;
+  workspace: WorkSpaceType;
+  members: ProjectMemberType[];
+  status: ProjectStatus;
+  createdAt: Date;
+  updatedAt: Date;
+  startDate?: Date;
+  dueDate?: Date;
+  progress?: number;
+  tasks?: TaskType[];
+  isArchived?: boolean;
 }
