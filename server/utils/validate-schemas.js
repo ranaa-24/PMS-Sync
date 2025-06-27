@@ -30,3 +30,18 @@ export const workspaceSchema = z.object({
     description: z.string().max(250, "Maximum 250 characters long").optional(), 
     color: z.string().min(1, "Color required"),
 })
+
+export const ProjectSchema = z.object({
+    title: z.string().min(2, 'Title must be at least 2 characters long'),
+    description: z.string().max(200, 'Description must be at most 200 characters long').optional(),
+    status: z.enum(['Planning', 'In Progress', 'Completed', 'On Hold', 'Cancelled']),
+    startDate: z.string(),
+    dueDate: z.string().optional(), 
+    tags: z.string().optional(), 
+    members: z.array(
+        z.object({
+            user: z.string(), 
+            role: z.enum(["manager", "contributor", "viewer"])
+        })
+    ).optional(),
+})

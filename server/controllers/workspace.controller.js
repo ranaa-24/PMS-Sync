@@ -74,11 +74,14 @@ const getWorkspaceProjects = async (req, res) => {
             return res.status(404).json({ message: "Workspace not found." });
         }
 
+
         const projects = await ProjectModel.find({
             workspace: workspaceId,
             isArchived: false,
-            'members.user': req.user._id
-        }).populate("tasks", "status").sort({ createdAt: -1 });
+            // 'members.user': req.user._id
+        })
+        // .populate("tasks", "status")
+        .sort({ createdAt: -1 });
 
 
         return res.status(200).json({

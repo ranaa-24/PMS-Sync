@@ -18,6 +18,8 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useCreateProjectMutation } from '@/hooks/useProjects';
+import { toast } from 'sonner';
 
 
 interface PropsTypes {
@@ -44,9 +46,28 @@ function CreateProjectModal({ isOpen, onOpenChange, workspaceId, workspaceMember
     }
   });
 
-  const isPending = false;
+  const { mutate: mutateProjects, isPending } = useCreateProjectMutation();
+
   const onSubmit = (data: CreateProjectModalFormType) => {
-    console.log(data);
+    if (!workspaceId) return;
+    mutateProjects({ formData: data, workspaceId: workspaceId }, {
+      onSuccess: () => {
+        toast.success("Project created successfully", {
+          description: "You can now manage your project.",
+        });
+        form.reset();
+        onOpenChange(false);
+      },
+
+      onError: (error: any) => {
+        toast.error("Failed to create project", {
+          description: error?.response?.data?.message || "Something went wrong",
+        });
+
+        console.log("Error in CreateProjectModal onSubmit:", error);
+      }
+
+    })
   }
 
 
@@ -118,7 +139,7 @@ function CreateProjectModal({ isOpen, onOpenChange, workspaceId, workspaceMember
               )}
             />
 
-            <div className='grid grid-cols-2 gap-4'>
+            <div className='grid sm:grid-cols-2 gap-4'>
               <FormField
                 control={form.control}
                 name="startDate"
@@ -202,90 +223,91 @@ function CreateProjectModal({ isOpen, onOpenChange, workspaceId, workspaceMember
               render={({ field }) => {
                 const selectedMembers = field.value || [];
 
-                return(
-                <FormItem>
-                  <FormLabel>Add Members</FormLabel>
-                  <FormControl>
-                    <Popover>
-                      <PopoverTrigger asChild>
+                return (
+                  <FormItem>
+                    <FormLabel>Add Members</FormLabel>
+                    <FormControl>
+                      <Popover>
+                        <PopoverTrigger asChild>
                           <Button className='border border-main-font hover:brightness-125 w-full'>
                             {
                               selectedMembers.length === 0 ? (
                                 <span className='text-secondary-font'>Select Members</span>
                               ) :
-                              (
-                                selectedMembers.length < 3 ? (
+                                (
+                                  selectedMembers.length < 3 ? (
                                     selectedMembers.map((m) => {
                                       const member = workspaceMembers.find((workspaceMember) => workspaceMember.user._id === m.user)
 
                                       return `${member?.user?.name} (${member?.role})`
                                     })
-                                ) : (
-                                  `${selectedMembers.length} Members Selected`
+                                  ) : (
+                                    `${selectedMembers.length} Members Selected`
+                                  )
                                 )
-                              )
                             }
                           </Button>
-                      </PopoverTrigger>
+                        </PopoverTrigger>
 
-                      <PopoverContent className='max-w-sm overflow-y-auto bg-deep-surface text-main-font border border-main-border' align='start' >
-                            <div className='flex flex-col gap-2'>
-                                {
-                                workspaceMembers.map((member) => {
-                                  const selectedMember = selectedMembers.find((m) => member.user._id === m.user);
-                                  
-                                  return <div key={member._id} className="flex items-center gap-2 p-2 rounded ">
-                                      <Checkbox 
-                                        checked={!!selectedMember}  // reuire a bool value thats why !!
-                                        onCheckedChange={(checked) => {
-                                            if(checked){
-                                              // if the current checkbx is checked then change the form state, by adding a new member 
-                                              field.onChange([...selectedMembers, {user: member.user._id, role: "contributor"}]);
-                                            }else{
-                                              // if the current chkbox is not seleted, remove from the feild value
-                                              field.onChange(selectedMembers.filter((m) => m.user !== member.user._id));
-                                            }
-                                        }}
-                                        id={`member - ${member.user._id}`}
-                                      />
+                        <PopoverContent className='max-w-sm overflow-y-auto bg-deep-surface text-main-font border border-main-border' align='start' >
+                          <div className='flex flex-col gap-2'>
+                            {
+                              workspaceMembers.map((member) => {
+                                const selectedMember = selectedMembers.find((m) => member.user._id === m.user);
 
-                                      <span className='truncate flex-1'>{member?.user.name}</span>
-
-                                      {
-                                        selectedMember && (
-                                          <Select value={selectedMember.role} onValueChange={(role) => {
-                                              selectedMembers.map((m) => m.user === member.user._id ? {...m, role: role as "manager" | "contributor" | "viewer"} : m)
-                                          }}>
-
-                                              <SelectTrigger>
-                                                <SelectValue placeholder="Set Role"/>
-                                              </SelectTrigger>
-
-                                              <SelectContent className="bg-deep-surface border border-main-border text-main-font">
-                                                <SelectItem value='manager'>Manager</SelectItem>
-                                                <SelectItem value='contributor'>Contributor</SelectItem>
-                                                <SelectItem value='viewer'>Viewer</SelectItem>
-                                              </SelectContent>
-                                          </Select>
-                                        )
+                                return <div key={member._id} className="flex items-center gap-2 p-2 rounded ">
+                                  <Checkbox
+                                    checked={!!selectedMember}  // reuire a bool value thats why !!
+                                    onCheckedChange={(checked) => {
+                                      if (checked) {
+                                        // if the current checkbx is checked then change the form state, by adding a new member 
+                                        field.onChange([...selectedMembers, { user: member.user._id, role: "contributor" }]);
+                                      } else {
+                                        // if the current chkbox is not seleted, remove from the feild value
+                                        field.onChange(selectedMembers.filter((m) => m.user !== member.user._id));
                                       }
-                                  </div>
-                                })
-                                }
-                            </div>
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}}
+                                    }}
+                                    id={`member - ${member.user._id}`}
+                                  />
+
+                                  <span className='truncate flex-1'>{member?.user.name}</span>
+
+                                  {
+                                    selectedMember && (
+                                      <Select value={selectedMember.role} onValueChange={(role) => {
+                                        field.onChange(selectedMembers.map((m) => m.user === member.user._id ? { ...m, role: role as "manager" | "contributor" | "viewer" } : m))
+                                      }}>
+
+                                        <SelectTrigger>
+                                          <SelectValue placeholder="Set Role" />
+                                        </SelectTrigger>
+
+                                        <SelectContent className="bg-deep-surface border border-main-border text-main-font">
+                                          <SelectItem value='manager'>Manager</SelectItem>
+                                          <SelectItem value='contributor'>Contributor</SelectItem>
+                                          <SelectItem value='viewer'>Viewer</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    )
+                                  }
+                                </div>
+                              })
+                            }
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
             />
 
-              <DialogFooter>
-                <Button type='submit' disabled={isPending} className="w-full h-11 font-bold bg-theme-primary text-white hover:bg-theme-primary/85">
+            <DialogFooter>
+              <Button type='submit' disabled={isPending} className="w-full h-11 font-bold bg-theme-primary text-white hover:bg-theme-primary/85">
                 {isPending ? "Creating.." : "Create Project"}
-                </Button>
-              </DialogFooter>
+              </Button>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>

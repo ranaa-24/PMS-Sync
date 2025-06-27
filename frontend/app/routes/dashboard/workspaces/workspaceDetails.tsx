@@ -23,7 +23,7 @@ function WorkspaceDetails() {
     const [isCreateProject, setIsCreateProject] = useState<boolean>(false);
     const [isInviteMember, setIsInviteMember] = useState<boolean>(false);
 
-    const {data, isLoading } = useFetchWorkspaceQuery(workspaceId ?? " ") as ResponseType;
+    const {data, isLoading } = useFetchWorkspaceQuery(workspaceId as string) as ResponseType;
 
     if(isLoading){
         return <div className='h-full flex items-center justify-center'>
@@ -37,7 +37,8 @@ function WorkspaceDetails() {
         </div>
     }
 
-
+    console.log(data);
+    
     
   return (
     <div className='space-y-8'>
