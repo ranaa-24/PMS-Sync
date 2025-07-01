@@ -64,7 +64,7 @@ function ProjectDetails() {
                 <div>
                     <BackButton />
                     <div className="flex items-center gap-3 mt-4">
-                        <h1 className='text-2xl md:text-3xl text-main-font font-bold '>{project.title}</h1>
+                        <h1 className='text-2xl md:text-3xl text-main-font font-bold'> {project.title} </h1>
                     </div>
                     {project.description && <p className='text-sm md:text-base text-secondary-font break-all  max-h-14'>{project.description}</p>}
                 </div>
@@ -86,13 +86,12 @@ function ProjectDetails() {
                 </div>
             </div>
 
-
-            {/* TODO: Some css skill issues */}
+            {/* make it responsive */}
 
             <div className="flex items-center justify-between">
                 <Tabs defaultValue="all" className="w-full">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                        <TabsList className="bg-surface border border-main-border rounded-lg p-1 flex gap-2 shadow-sm md:px-2">
+                        <TabsList className="bg-surface border border-main-border rounded-lg p-1 flex md:gap-2 shadow-sm md:px-2">
                             <TabsTrigger
                                 value="all"
                                 onClick={() => setTaskFilter("All")}
@@ -150,7 +149,7 @@ function ProjectDetails() {
                     </div>
 
                     <TabsContent value="all" className="m-0">
-                        <div className="grid lg:grid-cols-3 gap-4">
+                        <div className="grid lg:grid-cols-3 gap-4 mb-4">
                             <TaskColumn
                                 title="To Do"
                                 tasks={tasks.filter((task) => task.status === "To Do")}
@@ -210,7 +209,6 @@ function ProjectDetails() {
 
             {/* create task dialog  */}
             <CreateTaskDialog open={isCreateTask} onOpenChange={setIsCreateTask} projectId={projectId!} projectMembers={project.members as any} />
-
         </div>
     )
 }
@@ -224,8 +222,7 @@ interface TaskColumnProps {
     isFullWidth?: boolean;
 }
 
-
-// TODO: Some issue causing exptra scroll
+// TODO: responsive
 const TaskColumn = ({
     title,
     tasks,
