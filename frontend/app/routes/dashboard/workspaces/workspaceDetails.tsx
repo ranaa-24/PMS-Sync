@@ -6,7 +6,7 @@ import Loader from '@/components/common/Loader';
 import WorkspaceHeader from '@/components/layouts/workspaces/WorkspaceHeader';
 import ProjectList from '@/components/layouts/workspaces/ProjectList';
 import CreateProjectModal from '@/components/layouts/project/CreateProjectModal';
-
+import DataNotFound from '@/components/common/dataNotFound';
 
 interface ResponseType{
     data: {
@@ -25,6 +25,12 @@ function WorkspaceDetails() {
 
     const {data, isLoading } = useFetchWorkspaceQuery(workspaceId as string) as ResponseType;
 
+    if (!data && !isLoading) {
+        return (
+            <DataNotFound/>
+        );
+    }
+
     if(isLoading){
         return <div className='h-full flex items-center justify-center'>
             <Loader/>
@@ -37,14 +43,13 @@ function WorkspaceDetails() {
         </div>
     }
 
-    console.log(data);
     
     
   return (
     <div className='space-y-8'>
 
         <WorkspaceHeader
-            workspace={data.workspace}
+            workspace={data?.workspace}
             members={data?.workspace?.members}
             onCreateProject={() => setIsCreateProject(true)} 
             onInviteMember={() => setIsInviteMember(true)}
@@ -52,7 +57,7 @@ function WorkspaceDetails() {
 
         <ProjectList
             workspaceId = {workspaceId}
-            projects={data.projects}
+            projects={data?.projects}
             onCreateProject={() => setIsCreateProject(true)}
         />
 

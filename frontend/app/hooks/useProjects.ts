@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { type CreateProjectModalFormType } from "@/components/layouts/project/CreateProjectModal"
-import { postData } from "@/lib/api-request-utils"
+import { getData, postData } from "@/lib/api-request-utils"
 
 export const useCreateProjectMutation = () => {
     const queryClient = useQueryClient();
@@ -17,4 +17,12 @@ export const useCreateProjectMutation = () => {
             });
         }
     });
+}
+
+export const useProjectQuery = (projectId: string ) => {
+    return useQuery({
+       queryKey: ["project", projectId], 
+       queryFn: () => getData(`/projects/${projectId}/tasks`),
+    });
+
 }

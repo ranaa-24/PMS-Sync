@@ -81,3 +81,13 @@ export const ProjectSchma = z
       path: ["dueDate"],
     }
   );
+
+export const CreateTaskFormSchema = z.object({
+    title: z.string().min(2, "Title must be atleast 2 characters long"),
+    description: z.string().optional(), 
+    status: z.enum(["To Do", "In Progress", "Done"]),
+    priority: z.enum(["Low", "Medium", "High"]),
+    dueDate: z.string().min(1, "Due date is required"),
+    assignees: z.array(z.string()).min(1, "Atleast one assignee is required"),
+    
+})

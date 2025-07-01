@@ -20,7 +20,7 @@ function ProjectCard({ project, progress, workspaceId }: PropsTypes) {
                 <CardHeader>
                     <div className="flex flex-col gap-2">
                         <div className="flex justify-between items-center">
-                            <CardTitle className="text-lg font-semibold truncate">{project.title}</CardTitle>
+                            <CardTitle className="text-lg font-semibold truncate max-w-[calc(100%-90px)]">{project.title}</CardTitle>
                             <span
                                 className={cn(
                                     "text-xs px-3 py-1 rounded-full font-medium capitalize",

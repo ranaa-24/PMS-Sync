@@ -1,4 +1,4 @@
-import type { ProjectStatus } from "@/types";
+import type { ProjectStatus, TaskStatus } from "@/types";
 
 export const publicRoutes = ['/signup', '/login', '/forgot-password', '/reset-password', '/verify-mail', '/'];
 
@@ -24,3 +24,12 @@ export const getTaskStatusColor = (status: ProjectStatus) => {
             return "bg-gray-500/20 border border-gray-500/80 text-gray-300";
     };
 };
+
+export const getProjectProgress = (tasks: {status: TaskStatus}[]): number => {
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(task => task.status === "Done").length
+
+    const progress = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+    
+    return progress;
+}

@@ -36,12 +36,8 @@ export enum ProjectStatus {
   CANCELLED = "Cancelled",
 }
 
-export enum TaskStatus {
-  TODO = "To Do",
-  IN_PROGRESS = "In Progress",
-  REVIEW = "Review",
-  DONE = "Done",
-}
+export type TaskStatus = "To Do" | "In Progress" | "Done"
+
 
 export enum TaskPriority {
   LOW = "Low",
@@ -73,7 +69,8 @@ export interface TaskType {
   status: TaskStatus;
   priority: TaskPriority;
   dueDate?: Date;
-  assignees?: User[] | string[];
+  assignee: User | string;
+  assignees?: User[];
   createdAt: Date;
   updatedAt: Date;
   project: ProjectType;
@@ -85,9 +82,15 @@ export interface TaskType {
   attachments?: AttachmentType[];
 }
 
+export enum ProjectMemberRole{
+  MANAGER = "manager",
+  CONTRIBUTOR = "contributor",
+  VIEWER = "viewer"
+}
+
 export interface ProjectMemberType{
     user: User | string;
-    role: "manager" | "contributor" | "viewer";
+    role: ProjectMemberRole;
 }
 
 export interface ProjectType {
