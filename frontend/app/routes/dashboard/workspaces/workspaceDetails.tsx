@@ -8,6 +8,13 @@ import ProjectList from '@/components/layouts/workspaces/ProjectList';
 import CreateProjectModal from '@/components/layouts/project/CreateProjectModal';
 import DataNotFound from '@/components/common/dataNotFound';
 
+export function meta() {
+  return [
+    { title: "Projects - Sync" },
+    { name: "description", content: "Manage Projects" },
+  ];
+}
+
 interface ResponseType{
     data: {
         workspace: WorkSpaceType, 
