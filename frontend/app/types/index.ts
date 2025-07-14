@@ -75,10 +75,10 @@ export interface TaskType {
   updatedAt: Date;
   project: ProjectType;
   tags?: string[];
-  isarchived?: boolean;
+  isArchived?: boolean;
   createdBy: User | string;
   subTasks?: subtaskType[];
-  watchers?: User[] | string[];
+  watchers?: User[];
   attachments?: AttachmentType[];
 }
 
