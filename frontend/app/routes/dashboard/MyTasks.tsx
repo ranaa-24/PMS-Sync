@@ -12,6 +12,13 @@ import { ArrowUpRight, CheckCircle, Clock, FilterIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 
+export function meta() {
+    return [
+        { title: "My Tasks - Sync" },
+        { name: "description", content: "Manage workspaces" },
+    ];
+}
+
 function MyTasks() {
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -79,7 +86,6 @@ function MyTasks() {
                         task.description?.toLowerCase().includes(search.toLowerCase())
                 )
             : [];
-
 
 
     //   sort task
