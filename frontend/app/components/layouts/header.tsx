@@ -5,11 +5,12 @@ import { Button } from "../ui/button";
 import { Bell } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { User2 } from "lucide-react";
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, useNavigate } from "react-router";
 import WorkSpaceAvatar from "../common/workSpaceAvatar";
 import { Ellipsis, PlusSquareIcon, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useSidebarContext } from "@/providers/sidebar-context";
 import { useEffect, useRef } from "react";
+import { useLocation } from "react-router";
 
 
 interface HeaderPropsType {
@@ -50,6 +51,22 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    const navigate = useNavigate();
+    const isOnWorkspacePage = useLocation().pathname.includes('/workspace');
+
+    const handleClick = (workspace: WorkSpaceType) => {
+        onWorkSpaceSelected(workspace);
+        const location = window.location;
+        if(isOnWorkspacePage){
+            navigate(`/workspaces/${workspace._id}`);
+        }else{
+            const basePath = location.pathname
+            navigate(`${basePath}?workspaceId=${workspace._id}`);
+        }
+
+    }
+
+
     return (
         <div className="sticky top-0 z-50 px-4 md:px-6 lg:px-8 ">
             <div className="flex h-14 items-center justify-between  border-b-2 border-main-border">
@@ -86,7 +103,7 @@ function Header({ onCreatedWorkSpace, onWorkSpaceSelected, selectedWorkSpace }: 
                                         </DropdownMenuItem>
                                     ) : (
                                         workspaces.map((workspace: WorkSpaceType) => (
-                                            <DropdownMenuItem key={workspace._id} className="font-medium cursor-pointer" onClick={() => onWorkSpaceSelected(workspace)}>
+                                            <DropdownMenuItem key={workspace._id} className="font-medium cursor-pointer" onClick={() => handleClick(workspace)}>
                                                 {workspace.color && <WorkSpaceAvatar color={workspace.color} name={workspace.name} />}
                                                 <span className="ml-2">{workspace.name}</span>
                                             </DropdownMenuItem>

@@ -1,17 +1,30 @@
 import Loader from "@/components/common/Loader";
+import CommentSection from "@/components/layouts/tasks/CommentSection";
+import SubTasksDetails from "@/components/layouts/tasks/SubTasksDetails";
+import TaskActivity from "@/components/layouts/tasks/TaskActivity";
+import TaskAssigneesSelector from "@/components/layouts/tasks/TaskAssigneesSelector";
+import TaskDescription from "@/components/layouts/tasks/TaskDescription";
+import TaskPrioritySelector from "@/components/layouts/tasks/TaskPrioritySelector";
 import TaskStatusSelector from "@/components/layouts/tasks/TaskStatusSelector";
 import TaskTitle from "@/components/layouts/tasks/TaskTitle";
+import Watchers from "@/components/layouts/tasks/Watchers";
 import BackButton from "@/components/layouts/workspaces/backButton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useTaskByIdQuery } from "@/hooks/useTasks";
+import { useAchievedTaskMutation, useTaskByIdQuery, useWatchTaskMutation } from "@/hooks/useTasks";
 import { useAuthContext } from "@/providers/auth.context";
 import type { ProjectType, TaskType } from "@/types";
 import { formatDistanceToNow } from "date-fns";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 
-
+export function meta() {
+    return [
+        { title: "Task Details - Sync" },
+        { name: "description", content: "Manage workspaces" },
+    ];
+}
 
 const TaskDetails = () => {
     const { workspaceId, projectId, taskId } = useParams<{ workspaceId: string, projectId: string, taskId: string }>()
@@ -34,11 +47,19 @@ const TaskDetails = () => {
         );
     }
 
+    const { mutate: watchTask, isPending: isWatching } = useWatchTaskMutation();
+    const { mutate: achievedTask, isPending: isAchived } = useAchievedTaskMutation();
+
+
+
+
     if (isLoading) {
         return <div className='w-full h-full flex flex-col justify-center items-center'>
             <Loader />
         </div>
     }
+
+
 
     const { task, project } = data;
 
@@ -48,9 +69,37 @@ const TaskDetails = () => {
 
     const members = task?.assignees || [];
 
+    const handleWatchTask = () => {
+        watchTask(
+            { taskId: task._id },
+            {
+                onSuccess: () => {
+                    toast.success("Task watched");
+                },
+                onError: () => {
+                    toast.error("Failed to watch task");
+                },
+            }
+        );
+    };
+
+    const handleAchievedTask = () => {
+        achievedTask(
+            { taskId: task._id },
+            {
+                onSuccess: () => {
+                    toast.success("Task achieved");
+                },
+                onError: () => {
+                    toast.error("Failed to achieve task");
+                },
+            }
+        );
+    };
+
 
     return <div className="container mx-auto p-0 py-4 md:px-4">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+        <div className=" flex flex-col md:flex-row items-center justify-between mb-6">
 
             <div className="flex flex-col justify-center md:flex-row md:items-center">
                 <BackButton />
@@ -72,9 +121,10 @@ const TaskDetails = () => {
                 <Button
                     variant={"outline"}
                     size="sm"
-                    onClick={() => { }}
-                    className={`w-full md:w-auto flex items-center justify-center font-medium border border-theme-primary/60 ${isUserWatching ? "bg-theme-secondary/10 text-theme-secondary" : "bg-theme-primary/90 text-white"
-                        } hover:bg-theme-primary/80 transition`}
+                    onClick={handleWatchTask}
+                    disabled={isWatching}
+                    className={`w-full md:w-auto flex items-center justify-center font-medium border border-theme-primary/60 ${isUserWatching ? "bg-theme-secondary/20 text-theme-secondary border border-theme-secondary/80" : "bg-theme-primary/90 text-white"
+                        } hover:brightness-125 transition`}
                 >
                     {isUserWatching ? (
                         <>
@@ -92,28 +142,29 @@ const TaskDetails = () => {
                 <Button
                     variant={"outline"}
                     size="sm"
-                    // onClick={handleAchievedTask}
+                    onClick={handleAchievedTask}
+                    disabled={isAchived}
                     className={`w-full md:w-auto flex items-center justify-center font-medium border border-theme-primary/60 ${task.isArchived
-                            ? "bg-theme-secondary/10 text-theme-secondary"
-                            : "bg-theme-primary/90 text-white"
-                        } hover:bg-theme-primary/80 transition`}
+                        ? "bg-theme-secondary/20 text-theme-secondary border border-theme-secondary/80"
+                        : "bg-theme-primary/90 text-white"
+                        } hover:brightness-125 transition`}
                 >
                     <span>{task.isArchived ? "Unarchive" : "Archive"}</span>
                 </Button>
             </div>
         </div>
 
-        <div className="flex flex-col gap-6">
-            <div className="lg:col-span-2">
+        <div className="flex flex-col lg:flex-row gap-6 ">
+            <div className="lg:col-span-2 flex-1">
                 <div className="bg-surface border border-glass-shadow rounded-lg p-6 shadow-sm mb-6">
                     <div className="flex flex-col md:flex-row justify-between items-start">
                         <div>
                             <Badge
                                 className={`${task.priority === "High"
-                                        ? "bg-theme-secondary/20 text-theme-secondary border-theme-secondary/80"
-                                        : task.priority === "Medium"
-                                            ? "bg-red-300/20 text-red-300 border-red-300/80"
-                                            : "bg-theme-primary/10 text-theme-primary border-theme-primary/60"}`}
+                                    ? "bg-theme-secondary/20 text-theme-secondary border-theme-secondary/80"
+                                    : task.priority === "Medium"
+                                        ? "bg-red-300/20 text-red-300 border-red-300/80"
+                                        : "bg-theme-primary/10 text-theme-primary border-theme-primary/60"}`}
 
                                 variant="outline"
                             >
@@ -145,36 +196,32 @@ const TaskDetails = () => {
                         </div>
                     </div>
 
-                    {/* <div className="mb-6">
-                        <h3 className="text-sm font-medium text-muted-foreground mb-0">
-                            Description
-                        </h3>
-
+                    <div className="my-3">
                         <TaskDescription
                             description={task.description || ""}
                             taskId={task._id}
                         />
-                    </div> */}
+                    </div>
 
-                    {/* <TaskAssigneesSelector
+                    <TaskAssigneesSelector
                         task={task}
-                        assignees={task.assignees}
+                        assignees={task.assignees!}
                         projectMembers={project.members as any}
                     />
 
                     <TaskPrioritySelector priority={task.priority} taskId={task._id} />
 
-                    <SubTasksDetails subTasks={task.subtasks || []} taskId={task._id} /> */}
+                    <SubTasksDetails subTasks={task.subtasks || []} taskId={task._id} />
                 </div>
 
-                {/* <CommentSection taskId={task._id} members={project.members as any} /> */}
+                <CommentSection taskId={task._id} members={project.members as any} />
             </div>
 
-            {/* <div className="w-full">
+            <div className="w-full md:w-[460px]">
                 <Watchers watchers={task.watchers || []} />
 
                 <TaskActivity resourceId={task._id} />
-            </div> */}
+            </div>
         </div>
 
 

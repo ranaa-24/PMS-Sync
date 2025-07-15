@@ -26,22 +26,22 @@ function SidebarComponent({ currentWorkSpace }: { currentWorkSpace: WorkSpaceTyp
         },
         {
             title: "My Tasks",
-            href: 'my-tasks',
+            href: '/my-tasks',
             icon: ListChecksIcon,
         },
         {
             title: 'Members',
-            href: 'members',
+            href: '/members',
             icon: UsersIcon,
         },
         {
             title: "Completed",
-            href: 'completed',
+            href: '/completed',
             icon: CheckSquareIcon
         },
         {
             title: "Settings",
-            href: 'settings',
+            href: '/settings',
             icon: Settings2Icon,
         }
     ]

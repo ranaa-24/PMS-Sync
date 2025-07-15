@@ -18,6 +18,7 @@ const routes: RouteConfig = [
         route("/workspaces/:workspaceId", "routes/dashboard/workspaces/workspaceDetails.tsx"),
         route("/workspaces/:workspaceId/projects/:projectId", "routes/dashboard/project/projectDetails.tsx"), 
         route("/workspaces/:workspaceId/projects/:projectId/tasks/:taskId", "routes/dashboard/task/taskDetails.tsx"), 
+        route("/my-tasks", "routes/dashboard/MyTasks.tsx"),
     ]), 
     
 ];  
