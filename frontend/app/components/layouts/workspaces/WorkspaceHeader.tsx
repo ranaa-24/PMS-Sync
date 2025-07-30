@@ -54,7 +54,7 @@ function WorkspaceHeader({ workspace, members, onCreateProject, onInviteMember }
               members.map(m => (                
                 <Avatar key={m._id} title={m?.user?.name} className="size-8 border-1 hover:cursor-pointer border-glass-shadow">
                   <AvatarImage src={m?.user?.profilePicture} />
-                  <AvatarFallback className="bg-surface border border-glass-shadow font-bold">{m.user?.name.charAt(0).toUpperCase() || <User2 />}</AvatarFallback>
+                  <AvatarFallback className="bg-deep-surface border border-glass-shadow font-bold">{m.user?.name.charAt(0).toUpperCase() || <User2 />}</AvatarFallback>
                 </Avatar>
               ))
             }

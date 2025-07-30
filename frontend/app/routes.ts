@@ -19,8 +19,12 @@ const routes: RouteConfig = [
         route("/workspaces/:workspaceId/projects/:projectId", "routes/dashboard/project/projectDetails.tsx"), 
         route("/workspaces/:workspaceId/projects/:projectId/tasks/:taskId", "routes/dashboard/task/taskDetails.tsx"), 
         route("/my-tasks", "routes/dashboard/MyTasks.tsx"),
+        route("/members", "routes/dashboard/Members.tsx"),
+        route("/completed", "routes/dashboard/Completed.tsx"),
+        route("/settings", "routes/dashboard/Settings.tsx"),
     ]), 
     
+    route("workspace-invite/:workspaceId", "routes/dashboard/workspaces/workspaceInvite.tsx")
 ];  
 
 export default routes;

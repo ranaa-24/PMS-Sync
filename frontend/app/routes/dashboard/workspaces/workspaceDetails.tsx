@@ -7,6 +7,7 @@ import WorkspaceHeader from '@/components/layouts/workspaces/WorkspaceHeader';
 import ProjectList from '@/components/layouts/workspaces/ProjectList';
 import CreateProjectModal from '@/components/layouts/project/CreateProjectModal';
 import DataNotFound from '@/components/common/dataNotFound';
+import InviteMemberDialog from '../../../components/layouts/workspaces/InviteMemberDialog';
 
 export function meta() {
   return [
@@ -70,6 +71,12 @@ function WorkspaceDetails() {
 
         {/* create project modal */}
         <CreateProjectModal isOpen={isCreateProject} onOpenChange={setIsCreateProject} workspaceId={workspaceId} workspaceMembers={data?.workspace?.members}/>
+
+         <InviteMemberDialog
+        isOpen={isInviteMember}
+        onOpenChange={setIsInviteMember}
+        workspaceId={workspaceId}
+      />
     </div>
   )
 }
